@@ -1,0 +1,22 @@
+---
+project_name: cognito-cli
+
+builds:
+- main: ./cmd/cognito-cli/main.go
+  binary: cognito-cli
+  ldflags:
+    - -s -w -X main.version={{.Version}}
+  env:
+  - CGO_ENABLED=0
+
+
+archives:
+  - format: tar.gz
+    wrap_in_directory: true
+    format_overrides:
+      - goos: windows
+        format: zip
+    # remove README and LICENSE
+    files:
+      - LICENSE
+      - README.md
