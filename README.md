@@ -1,10 +1,40 @@
 # cognito-cli
 
-This is a tool which provides a bunch of utility functions which I really miss from other identity services in one handly command line interface.
+This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.com/cognito), it provides a bunch of utility functions which are designed to make administering Cognito easier.
 
-# commands
+# usage
 
-The tool is comprised of a range of handy sub commands, and the ability to search and cache results locally, to avoid nasty rate limiting issues.
+To list pools.
+
+```
+Usage: cognito-cli ls
+
+List pools.
+
+Flags:
+  --help     Show context-sensitive help.
+  --debug    Enable debug mode.
+
+  --csv      Enable csv output.
+```
+
+To find users in a pool.
+
+```
+Usage: cognito-cli find --user-pool-id=STRING
+
+Find users.
+
+Flags:
+  --help                    Show context-sensitive help.
+  --debug                   Enable debug mode.
+
+  --user-pool-id=STRING
+  --csv                     Enable csv output.
+  --attributes=email,...    Attributes to retrieve and output.
+  --back-off=500            Delay in ms used to backoff during paging of records
+
+```
 
 # TODO
 
@@ -14,3 +44,6 @@ The following sub commands enable the operation for all users, or a sub set Usin
 * [ ] Invoke global logout for those users
 * [ ] Trigger a password reset for all matching users
 
+# License
+
+This application is released under Apache 2.0 license and is copyright Mark Wolfe.
