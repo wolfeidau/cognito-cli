@@ -33,6 +33,20 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
+// ListPools mocks base method
+func (m *MockService) ListPools(arg0 cognito.UserPoolsPageFunc) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListPools", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ListPools indicates an expected call of ListPools
+func (mr *MockServiceMockRecorder) ListPools(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListPools", reflect.TypeOf((*MockService)(nil).ListPools), arg0)
+}
+
 // ListUsers mocks base method
 func (m *MockService) ListUsers(arg0 string, arg1 cognito.UsersPageFunc) error {
 	m.ctrl.T.Helper()

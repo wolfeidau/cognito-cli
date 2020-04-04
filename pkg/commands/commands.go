@@ -1,6 +1,9 @@
 package commands
 
 import (
+	"io"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/jedib0t/go-pretty/table"
@@ -10,8 +13,10 @@ import (
 
 // Context cli context used for common options
 type Context struct {
-	Debug   bool
-	Cognito cognito.Service
+	Debug            bool
+	DisableLocalTime bool
+	Cognito          cognito.Service
+	Writer           io.Writer
 }
 
 func convertMap(m map[string]string) map[string]interface{} {
@@ -61,4 +66,12 @@ func matchFilters(filters map[string]string, attributes map[string]string) bool 
 	}
 
 	return false
+}
+
+func awsTimeLocal(t *time.Time, local bool) time.Time {
+	if local {
+		return aws.TimeValue(t).Local()
+	}
+
+	return aws.TimeValue(t)
 }

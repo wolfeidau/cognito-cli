@@ -12,10 +12,13 @@ Usage: cognito-cli ls
 List pools.
 
 Flags:
-  --help     Show context-sensitive help.
-  --debug    Enable debug mode.
+  --help                  Show context-sensitive help.
+  --debug                 Enable debug mode.
+  --disable-local-time    Disable localisation of times output.
+  --version
 
-  --csv      Enable csv output.
+  --csv                   Enable csv output.
+
 ```
 
 To find users in a pool.
@@ -28,6 +31,7 @@ Find users.
 Flags:
   --help                             Show context-sensitive help.
   --debug                            Enable debug mode.
+  --disable-local-time               Disable localisation of times output.
   --version
 
   --user-pool-id=STRING
@@ -35,6 +39,7 @@ Flags:
   --attributes=Username,email,...    Attributes to retrieve and output.
   --back-off=500                     Delay in ms used to backoff during paging of records
   --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
+
 
 ```
 
