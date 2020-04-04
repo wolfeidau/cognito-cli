@@ -33,6 +33,21 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
+// DescribePoolAttributes mocks base method
+func (m *MockService) DescribePoolAttributes(arg0 string) ([]string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DescribePoolAttributes", arg0)
+	ret0, _ := ret[0].([]string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// DescribePoolAttributes indicates an expected call of DescribePoolAttributes
+func (mr *MockServiceMockRecorder) DescribePoolAttributes(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribePoolAttributes", reflect.TypeOf((*MockService)(nil).DescribePoolAttributes), arg0)
+}
+
 // ListPools mocks base method
 func (m *MockService) ListPools(arg0 cognito.UserPoolsPageFunc) error {
 	m.ctrl.T.Helper()

@@ -33,6 +33,7 @@ type Service interface {
 	ListUsers(userPoolID string, f UsersPageFunc) error
 	ListPools(f UserPoolsPageFunc) error
 	Logout(userPoolID string, username string) error
+	DescribePoolAttributes(userPoolID string) ([]string, error)
 }
 
 type cognitoService struct {
@@ -76,4 +77,22 @@ func (ul *cognitoService) Logout(userPoolID string, username string) error {
 		return err
 	}
 	return nil
+}
+
+func (ul *cognitoService) DescribePoolAttributes(userPoolID string) ([]string, error) {
+
+	res, err := ul.csvc.DescribeUserPool(&cognitoidentityprovider.DescribeUserPoolInput{
+		UserPoolId: aws.String(userPoolID),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	result := []string{}
+
+	for _, sattr := range res.UserPool.SchemaAttributes {
+		result = append(result, aws.StringValue(sattr.Name))
+	}
+
+	return result, nil
 }

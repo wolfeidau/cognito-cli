@@ -21,6 +21,7 @@ var cli struct {
 
 	Ls     commands.LsCmd     `cmd:"ls" help:"List pools."`
 	Find   commands.FindCmd   `cmd:"find" help:"Find users."`
+	Export commands.ExportCmd `cmd:"export" help:"Find users and export in CSV format."`
 	Logout commands.LogoutCmd `cmd:"logout" help:"Find users and trigger a logout."`
 }
 
