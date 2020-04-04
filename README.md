@@ -26,13 +26,15 @@ Usage: cognito-cli find --user-pool-id=STRING
 Find users.
 
 Flags:
-  --help                    Show context-sensitive help.
-  --debug                   Enable debug mode.
+  --help                             Show context-sensitive help.
+  --debug                            Enable debug mode.
+  --version
 
   --user-pool-id=STRING
-  --csv                     Enable csv output.
-  --attributes=email,...    Attributes to retrieve and output.
-  --back-off=500            Delay in ms used to backoff during paging of records
+  --csv                              Enable csv output.
+  --attributes=Username,email,...    Attributes to retrieve and output.
+  --back-off=500                     Delay in ms used to backoff during paging of records
+  --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 
 ```
 
