@@ -40,15 +40,35 @@ Flags:
   --back-off=500                     Delay in ms used to backoff during paging of records
   --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 
+```
+
+To find users in a pool and log them out.
 
 ```
+Usage: cognito-cli logout --user-pool-id=STRING
+
+Find users and trigger a logout.
+
+Flags:
+  --help                    Show context-sensitive help.
+  --debug                   Enable debug mode.
+  --disable-local-time      Disable localisation of times output.
+  --version
+
+  --user-pool-id=STRING
+  --back-off=500            Delay in ms used to backoff during paging of records
+  --filter=KEY=VALUE;...    Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
+
+```
+
+**NOTE:** This calls [AdminUserGlobalSignOut](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminUserGlobalSignOut.html) for each user which revokes their refresh token, it won't actually log them out straight away, they will however have to log in the next time they attempt to refresh their access token. This can take up to 1 hour for users who have recently refreshed their token.
 
 # TODO
 
 The following sub commands enable the operation for all users, or a sub set Using a simple filter.
 
 * [ ] Export all users and create a local json file containing the user data
-* [ ] Invoke global logout for those users
+* [x] Invoke global logout for those users
 * [ ] Trigger a password reset for all matching users
 
 # License

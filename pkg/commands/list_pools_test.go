@@ -58,11 +58,11 @@ func TestLsNoPools(t *testing.T) {
 
 	cognitoSvc.EXPECT().ListPools(gomock.Any()).Return(nil)
 
-	fcmd := &LsCmd{}
+	lscmd := &LsCmd{}
 
 	buf := &bytes.Buffer{}
 
-	err := fcmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+	err := lscmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
 	assert.NoError(err)
 	assert.Equal("No pools found.\n", buf.String())
 }
