@@ -15,8 +15,9 @@ var (
 )
 
 var cli struct {
-	Debug   bool `help:"Enable debug mode."`
-	Version kong.VersionFlag
+	Debug            bool `help:"Enable debug mode."`
+	DisableLocalTime bool `help:"Disable localisation of times output."`
+	Version          kong.VersionFlag
 
 	Ls   commands.LsCmd   `cmd:"ls" help:"List pools."`
 	Find commands.FindCmd `cmd:"find" help:"Find users."`
@@ -43,6 +44,6 @@ func main() {
 
 	cognitoSvc := cognito.NewService()
 
-	err := ctx.Run(&commands.Context{Debug: cli.Debug, Cognito: cognitoSvc})
+	err := ctx.Run(&commands.Context{Debug: cli.Debug, DisableLocalTime: cli.DisableLocalTime, Cognito: cognitoSvc, Writer: os.Stdout})
 	ctx.FatalIfErrorf(err)
 }

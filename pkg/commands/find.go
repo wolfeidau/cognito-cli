@@ -51,7 +51,7 @@ func (f *FindCmd) Run(ctx *Context) error {
 			}
 
 			tr = append(tr, aws.BoolValue(user.Enabled))
-			tr = append(tr, aws.TimeValue(user.UserLastModifiedDate).Local())
+			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !ctx.DisableLocalTime))
 
 			tw.AppendRows([]table.Row{tr})
 		}
@@ -67,16 +67,16 @@ func (f *FindCmd) Run(ctx *Context) error {
 	log.Debug().Int("len", tw.Length()).Msg("render table")
 
 	if tw.Length() == 0 {
-		fmt.Println("No users found.")
+		fmt.Fprintln(ctx.Writer, "No users found.")
 		return nil
 	}
 
 	tw.SortBy([]table.SortBy{{Name: "LastModified", Mode: table.Dsc}})
 
 	if f.CSV {
-		fmt.Println(tw.RenderCSV())
+		fmt.Fprintln(ctx.Writer, tw.RenderCSV())
 	} else {
-		fmt.Println(tw.Render())
+		fmt.Fprintln(ctx.Writer, tw.Render())
 	}
 
 	return nil
