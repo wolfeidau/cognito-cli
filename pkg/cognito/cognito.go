@@ -32,6 +32,7 @@ type UserPoolsPageFunc func(p *UserPoolsPage) bool
 type Service interface {
 	ListUsers(userPoolID string, f UsersPageFunc) error
 	ListPools(f UserPoolsPageFunc) error
+	Logout(userPoolID string, username string) error
 }
 
 type cognitoService struct {
@@ -64,4 +65,15 @@ func (ul *cognitoService) ListPools(f UserPoolsPageFunc) error {
 		func(p *cognitoidentityprovider.ListUserPoolsOutput, lastPage bool) bool {
 			return f(&UserPoolsPage{UserPools: p.UserPools})
 		})
+}
+
+func (ul *cognitoService) Logout(userPoolID string, username string) error {
+	_, err := ul.csvc.AdminUserGlobalSignOut(&cognitoidentityprovider.AdminUserGlobalSignOutInput{
+		UserPoolId: aws.String(userPoolID),
+		Username:   aws.String(username),
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }

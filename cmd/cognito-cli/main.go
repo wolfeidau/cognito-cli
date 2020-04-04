@@ -19,8 +19,9 @@ var cli struct {
 	DisableLocalTime bool `help:"Disable localisation of times output."`
 	Version          kong.VersionFlag
 
-	Ls   commands.LsCmd   `cmd:"ls" help:"List pools."`
-	Find commands.FindCmd `cmd:"find" help:"Find users."`
+	Ls     commands.LsCmd     `cmd:"ls" help:"List pools."`
+	Find   commands.FindCmd   `cmd:"find" help:"Find users."`
+	Logout commands.LogoutCmd `cmd:"logout" help:"Find users and trigger a logout."`
 }
 
 func main() {
