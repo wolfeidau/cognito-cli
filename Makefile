@@ -14,6 +14,14 @@ bin/golangci-lint-${GOLANGCI_VERSION}:
 bin/go-acc:
 	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/ory/go-acc
 
+bin/mockgen:
+	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/golang/mock/mockgen
+
+mocks: bin/mockgen
+	@echo "--- build all the mocks"
+	@bin/mockgen -destination=mocks/cognito_service.go -package=mocks github.com/wolfeidau/cognito-cli/pkg/cognito Service
+.PHONY: mocks
+
 clean:
 	@echo "--- clean all the things"
 	@rm -rf dist

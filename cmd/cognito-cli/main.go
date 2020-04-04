@@ -6,6 +6,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/wolfeidau/cognito-cli/pkg/cognito"
 	"github.com/wolfeidau/cognito-cli/pkg/commands"
 )
 
@@ -40,6 +41,8 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	err := ctx.Run(&commands.Context{Debug: cli.Debug})
+	cognitoSvc := cognito.NewService()
+
+	err := ctx.Run(&commands.Context{Debug: cli.Debug, Cognito: cognitoSvc})
 	ctx.FatalIfErrorf(err)
 }
