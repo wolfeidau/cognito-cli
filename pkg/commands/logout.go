@@ -26,6 +26,7 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 
 	filteringEnabled := len(f.Filter) > 0
 
+	// use this to keep a track of how many entries we will update and logout
 	usernames := []string{}
 
 	err := ctx.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
@@ -34,6 +35,7 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 		for _, user := range p.Users {
 
 			m := attrToMap(user.Attributes)
+
 			m["Username"] = aws.StringValue(user.Username)
 
 			if filteringEnabled && !matchFilters(f.Filter, m) {
@@ -65,7 +67,6 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 
 	pw := progress.NewWriter()
 	pw.SetOutputWriter(os.Stderr)
-	pw.SetTrackerLength(25)
 
 	tracker := &progress.Tracker{Message: "users being logged out", Total: int64(len(usernames))}
 
