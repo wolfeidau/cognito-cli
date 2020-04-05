@@ -1,11 +1,11 @@
 package commands
 
 import (
+	"encoding/csv"
 	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/jedib0t/go-pretty/table"
 	"github.com/rs/zerolog/log"
 	"github.com/wolfeidau/cognito-cli/pkg/cognito"
 )
@@ -21,7 +21,7 @@ type ExportCmd struct {
 func (f *ExportCmd) Run(ctx *Context) error {
 	log.Debug().Msg("find and export users")
 
-	tw := table.NewWriter()
+	csvw := csv.NewWriter(ctx.Writer)
 
 	attrs, err := ctx.Cognito.DescribePoolAttributes(f.UserPoolID)
 	if err != nil {
@@ -31,11 +31,16 @@ func (f *ExportCmd) Run(ctx *Context) error {
 	// prepend the Username
 	attrs = append([]string{"Username"}, attrs...)
 
-	tw.AppendHeader(buildTableHeader(attrs))
+	err = csvw.Write(append(attrs, "Enabled", "LastModified"))
+	if err != nil {
+		log.Fatal().Err(err).Msg("failed to write headers for CSV")
+	}
 
 	log.Debug().Fields(convertMap(f.Filter)).Msg("Filter")
 
 	filteringEnabled := len(f.Filter) > 0
+
+	count := 0
 
 	err = ctx.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
 		log.Debug().Int("len", len(p.Users)).Msg("page")
@@ -49,7 +54,7 @@ func (f *ExportCmd) Run(ctx *Context) error {
 				continue
 			}
 
-			tr := table.Row{}
+			tr := []string{}
 
 			for _, attr := range attrs {
 				if _, ok := m[attr]; ok {
@@ -59,10 +64,14 @@ func (f *ExportCmd) Run(ctx *Context) error {
 				}
 			}
 
-			tr = append(tr, aws.BoolValue(user.Enabled))
-			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !ctx.DisableLocalTime))
+			tr = append(tr, fmt.Sprintf("%t", aws.BoolValue(user.Enabled)))
+			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !ctx.DisableLocalTime).String())
 
-			tw.AppendRows([]table.Row{tr})
+			err = csvw.Write(tr)
+			if err != nil {
+				log.Fatal().Err(err).Msg("failed to write row to CSV")
+			}
+			count++
 		}
 
 		time.Sleep(time.Duration(f.BackOff) * time.Millisecond)
@@ -73,16 +82,19 @@ func (f *ExportCmd) Run(ctx *Context) error {
 		return err
 	}
 
-	log.Debug().Int("len", tw.Length()).Msg("render table")
+	log.Debug().Int("len", count).Msg("render table")
 
-	if tw.Length() == 0 {
+	if count == 0 {
 		fmt.Fprintln(ctx.Writer, "No users found.")
 		return nil
 	}
 
-	tw.SortBy([]table.SortBy{{Name: "LastModified", Mode: table.Dsc}})
+	// Write any buffered data to the underlying writer (standard output).
+	csvw.Flush()
 
-	fmt.Fprintln(ctx.Writer, tw.RenderCSV())
+	if err = csvw.Error(); err != nil {
+		log.Fatal().Err(err).Msg("failed to write flush data to CSV")
+	}
 
 	return nil
 }
