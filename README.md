@@ -3,11 +3,13 @@
 This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.com/cognito), it provides a bunch of utility functions which are designed to make administering Cognito easier.
 
 [![GitHub Actions status](https://github.com/wolfeidau/cognito-cli/workflows/Go/badge.svg?branch=master)](https://github.com/wolfeidau/cognito-cli/actions?query=workflow%3AGo)
-[![Go Report Card](https://goreportcard.com/badge/github.com/wolfeidau/cognito-cli)](https://goreportcard.com/report/github.com/wolfeidau/cognito-cli)[![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
+[![Go Report Card](https://goreportcard.com/badge/github.com/wolfeidau/cognito-cli)](https://goreportcard.com/report/github.com/wolfeidau/cognito-cli) [![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
 
 # usage
 
-To list pools.
+I have pulled out the CLI help for each sub command and provided them in the order which they are best explored in.
+
+To display a list of user pools.
 
 ```
 Usage: cognito-cli ls
@@ -22,6 +24,22 @@ Flags:
 
   --csv                   Enable csv output.
 
+```
+
+To list the schema attributes of a user pool.
+
+```
+Usage: cognito-cli list-attributes --user-pool-id=STRING
+
+List the schema attributes of the user pool.
+
+Flags:
+  --help                   Show context-sensitive help.
+  --debug                  Enable debug mode.
+  --disable-local-time     Disable localisation of times output.
+  --version
+
+  --user-pool-id=STRING
 ```
 
 To find users in a pool.
@@ -43,22 +61,6 @@ Flags:
   --back-off=500                     Delay in ms used to backoff during paging of records
   --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 
-```
-
-To list the attributes which are configured on a user pool.
-
-```
-Usage: cognito-cli list-attributes --user-pool-id=STRING
-
-List the user attributes for a pool.
-
-Flags:
-  --help                   Show context-sensitive help.
-  --debug                  Enable debug mode.
-  --disable-local-time     Disable localisation of times output.
-  --version
-
-  --user-pool-id=STRING
 ```
 
 To find users in a pool and export the results in CSV format.

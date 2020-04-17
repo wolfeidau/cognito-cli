@@ -20,10 +20,10 @@ var cli struct {
 	Version          kong.VersionFlag
 
 	Ls             commands.LsCmd             `cmd:"ls" help:"List pools."`
+	ListAttributes commands.ListAttributesCmd `cmd:"list-attributes" help:"List the schema attributes of the user pool."`
 	Find           commands.FindCmd           `cmd:"find" help:"Find users."`
 	Export         commands.ExportCmd         `cmd:"export" help:"Find users and export in CSV format."`
 	Logout         commands.LogoutCmd         `cmd:"logout" help:"Find users and trigger a logout."`
-	ListAttributes commands.ListAttributesCmd `cmd:"list-attributes" help:"List the user attributes for a pool."`
 }
 
 func main() {
