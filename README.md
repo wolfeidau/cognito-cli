@@ -2,6 +2,8 @@
 
 This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.com/cognito), it provides a bunch of utility functions which are designed to make administering Cognito easier.
 
+[![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
+
 # usage
 
 To list pools.
@@ -40,6 +42,22 @@ Flags:
   --back-off=500                     Delay in ms used to backoff during paging of records
   --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 
+```
+
+To list the attributes which are configured on a user pool.
+
+```
+Usage: cognito-cli list-attributes --user-pool-id=STRING
+
+List the user attributes for a pool.
+
+Flags:
+  --help                   Show context-sensitive help.
+  --debug                  Enable debug mode.
+  --disable-local-time     Disable localisation of times output.
+  --version
+
+  --user-pool-id=STRING
 ```
 
 To find users in a pool and export the results in CSV format.

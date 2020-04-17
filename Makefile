@@ -1,6 +1,6 @@
-GOLANGCI_VERSION = 1.23.8
+GOLANGCI_VERSION = 1.24.0
 
-ci: clean lint test
+ci: clean awsmocks lint test
 .PHONY: ci
 
 LDFLAGS := -ldflags="-s -w"
@@ -11,9 +11,6 @@ bin/golangci-lint-${GOLANGCI_VERSION}:
 	@curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | BINARY=golangci-lint bash -s -- v${GOLANGCI_VERSION}
 	@mv bin/golangci-lint $@
 
-bin/go-acc:
-	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/ory/go-acc
-
 bin/mockgen:
 	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/golang/mock/mockgen
 
@@ -21,6 +18,11 @@ mocks: bin/mockgen
 	@echo "--- build all the mocks"
 	@bin/mockgen -destination=mocks/cognito_service.go -package=mocks github.com/wolfeidau/cognito-cli/pkg/cognito Service
 .PHONY: mocks
+
+awsmocks: bin/mockgen
+	@echo "--- build all the awsmocks"
+	@bin/mockgen -destination=awsmocks/cognito.go -package=awsmocks github.com/aws/aws-sdk-go/service/cognitoidentityprovider/cognitoidentityprovideriface CognitoIdentityProviderAPI
+.PHONY: awsmocks
 
 clean:
 	@echo "--- clean all the things"
@@ -32,7 +34,7 @@ lint: bin/golangci-lint
 	@bin/golangci-lint run
 .PHONY: lint
 
-test: bin/go-acc
+test:
 	@echo "--- test all the things"
-	@bin/go-acc --ignore mocks ./... -- -short -v -failfast
+	@go test -v -covermode=count -coverprofile=coverage.txt ./cmd/... ./pkg/...
 .PHONY: test

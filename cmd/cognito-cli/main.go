@@ -19,10 +19,11 @@ var cli struct {
 	DisableLocalTime bool `help:"Disable localisation of times output."`
 	Version          kong.VersionFlag
 
-	Ls     commands.LsCmd     `cmd:"ls" help:"List pools."`
-	Find   commands.FindCmd   `cmd:"find" help:"Find users."`
-	Export commands.ExportCmd `cmd:"export" help:"Find users and export in CSV format."`
-	Logout commands.LogoutCmd `cmd:"logout" help:"Find users and trigger a logout."`
+	Ls             commands.LsCmd             `cmd:"ls" help:"List pools."`
+	Find           commands.FindCmd           `cmd:"find" help:"Find users."`
+	Export         commands.ExportCmd         `cmd:"export" help:"Find users and export in CSV format."`
+	Logout         commands.LogoutCmd         `cmd:"logout" help:"Find users and trigger a logout."`
+	ListAttributes commands.ListAttributesCmd `cmd:"list-attributes" help:"List the user attributes for a pool."`
 }
 
 func main() {
