@@ -2,7 +2,8 @@
 
 This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.com/cognito), it provides a bunch of utility functions which are designed to make administering Cognito easier.
 
-[![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
+[![GitHub Actions status](https://github.com/wolfeidau/cognito-cli/workflows/Go/badge.svg?branch=master)](https://github.com/wolfeidau/cognito-cli/actions?query=workflow%3AGo)
+[![Go Report Card](https://goreportcard.com/badge/github.com/wolfeidau/cognito-cli)](https://goreportcard.com/report/github.com/wolfeidau/cognito-cli)[![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
 
 # usage
 
