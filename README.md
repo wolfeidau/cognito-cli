@@ -5,7 +5,17 @@ This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.c
 [![GitHub Actions status](https://github.com/wolfeidau/cognito-cli/workflows/Go/badge.svg?branch=master)](https://github.com/wolfeidau/cognito-cli/actions?query=workflow%3AGo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/wolfeidau/cognito-cli)](https://goreportcard.com/report/github.com/wolfeidau/cognito-cli) [![Coverage Status](https://coveralls.io/repos/github/wolfeidau/cognito-cli/badge.svg?branch=master)](https://coveralls.io/github/wolfeidau/cognito-cli?branch=master)
 
-# usage
+# Installation
+
+You can download the latest release from the [release page](https://github.com/wolfeidau/cognito-cli/releases).
+
+If you want to build `cognito-cli` it requires a working Go installation (Go-1.14 or higher). The following command will install it to your `$GOPATH/bin`.
+
+```bash
+GO111MODULE=off go get -u -v github.com/wolfeidau/cognito-cli
+```
+
+# Usage
 
 I have pulled out the CLI help for each sub command and provided them in the order which they are best explored in.
 
