@@ -14,6 +14,9 @@ bin/golangci-lint-${GOLANGCI_VERSION}:
 bin/mockgen:
 	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/golang/mock/mockgen
 
+bin/gcov2lcov:
+	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/jandelgado/gcov2lcov
+
 mocks: bin/mockgen
 	@echo "--- build all the mocks"
 	@bin/mockgen -destination=mocks/cognito_service.go -package=mocks github.com/wolfeidau/cognito-cli/pkg/cognito Service
@@ -34,7 +37,8 @@ lint: bin/golangci-lint
 	@bin/golangci-lint run
 .PHONY: lint
 
-test:
+test: bin/gcov2lcov
 	@echo "--- test all the things"
-	@go test -v -covermode=count -coverprofile=coverage.txt ./cmd/... ./pkg/...
+	@go test -v -covermode=count -coverprofile=coverage.txt ./cmd/... ./pkg/... ./internal/...
+	@bin/gcov2lcov -infile=coverage.txt -outfile=coverage.lcov
 .PHONY: test

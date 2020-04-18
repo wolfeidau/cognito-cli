@@ -3,7 +3,6 @@ package commands
 import (
 	"bytes"
 	"testing"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -13,11 +12,7 @@ import (
 	"github.com/wolfeidau/cognito-cli/pkg/cognito"
 )
 
-var (
-	t1 = time.Date(2016, time.August, 15, 0, 0, 0, 0, time.UTC)
-)
-
-func TestFind(t *testing.T) {
+func TestLogout(t *testing.T) {
 	assert := require.New(t)
 
 	ctrl := gomock.NewController(t)
@@ -41,19 +36,15 @@ func TestFind(t *testing.T) {
 	}
 
 	cognitoSvc.EXPECT().ListUsers("abc123", gomock.Any()).Do(callbackFunc).Return(nil)
+	cognitoSvc.EXPECT().Logout("abc123", "wolfeidau").Return(nil)
 
-	fcmd := &FindCmd{
+	logoutcmd := &LogoutCmd{
 		UserPoolID: "abc123",
-		Attributes: []string{"Username"},
-		CSV:        true,
 	}
 
 	buf := &bytes.Buffer{}
 
-	err := fcmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
-
-	expected := "Username,Enabled,LastModified\nwolfeidau,false,2016-08-15 00:00:00 +0000 UTC\n"
-
+	err := logoutcmd.Run(&CLIContext{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
 	assert.NoError(err)
-	assert.Equal(expected, buf.String())
+	assert.Equal("Found users commencing logout for count=1\n", buf.String())
 }

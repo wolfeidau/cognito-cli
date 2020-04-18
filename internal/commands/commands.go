@@ -11,8 +11,8 @@ import (
 	"github.com/wolfeidau/cognito-cli/pkg/wildcard"
 )
 
-// Context cli context used for common options
-type Context struct {
+// CLIContext cli context used for common options
+type CLIContext struct {
 	Debug            bool
 	DisableLocalTime bool
 	Cognito          cognito.Service

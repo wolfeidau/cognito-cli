@@ -25,7 +25,7 @@ func TestListAttributes(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 
-	err := listAttributesCmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+	err := listAttributesCmd.Run(&CLIContext{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
 
 	expected := "+-------------+\n| NAME        |\n+-------------+\n| name        |\n| given_name  |\n| family_name |\n+-------------+\n"
 

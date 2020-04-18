@@ -13,11 +13,11 @@ type ListAttributesCmd struct {
 }
 
 // Run run the list operation
-func (f *ListAttributesCmd) Run(ctx *Context) error {
+func (f *ListAttributesCmd) Run(cli *CLIContext) error {
 
 	log.Debug().Msg("list attributes")
 
-	attrs, err := ctx.Cognito.DescribePoolAttributes(f.UserPoolID)
+	attrs, err := cli.Cognito.DescribePoolAttributes(f.UserPoolID)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to list pool attributes")
 	}
@@ -30,7 +30,7 @@ func (f *ListAttributesCmd) Run(ctx *Context) error {
 		tw.AppendRow(table.Row{att})
 	}
 
-	fmt.Fprintln(ctx.Writer, tw.Render())
+	fmt.Fprintln(cli.Writer, tw.Render())
 
 	return nil
 }

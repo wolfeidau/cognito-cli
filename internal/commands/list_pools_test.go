@@ -43,7 +43,7 @@ func TestLs(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 
-	err := fcmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+	err := fcmd.Run(&CLIContext{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
 	assert.NoError(err)
 	assert.Equal("ID,Name,Created\nabc123,test pool,2016-08-15 00:00:00 +0000 UTC\n", buf.String())
 }
@@ -62,7 +62,7 @@ func TestLsNoPools(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 
-	err := lscmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+	err := lscmd.Run(&CLIContext{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
 	assert.NoError(err)
 	assert.Equal("No pools found.\n", buf.String())
 }

@@ -15,18 +15,18 @@ type LsCmd struct {
 }
 
 // Run run the list operation
-func (l *LsCmd) Run(ctx *Context) error {
+func (l *LsCmd) Run(cli *CLIContext) error {
 	log.Debug().Msg("list pools")
 
 	tw := table.NewWriter()
 
 	tw.AppendHeader(table.Row{"ID", "Name", "Created"})
 
-	err := ctx.Cognito.ListPools(func(p *cognito.UserPoolsPage) bool {
+	err := cli.Cognito.ListPools(func(p *cognito.UserPoolsPage) bool {
 		log.Debug().Int("len", len(p.UserPools)).Msg("page")
 
 		for _, pool := range p.UserPools {
-			tw.AppendRows([]table.Row{{aws.StringValue(pool.Id), aws.StringValue(pool.Name), awsTimeLocal(pool.CreationDate, !ctx.DisableLocalTime)}})
+			tw.AppendRows([]table.Row{{aws.StringValue(pool.Id), aws.StringValue(pool.Name), awsTimeLocal(pool.CreationDate, !cli.DisableLocalTime)}})
 		}
 
 		return true // continue paging
@@ -38,16 +38,16 @@ func (l *LsCmd) Run(ctx *Context) error {
 	log.Debug().Int("len", tw.Length()).Msg("render table")
 
 	if tw.Length() == 0 {
-		fmt.Fprintln(ctx.Writer, "No pools found.")
+		fmt.Fprintln(cli.Writer, "No pools found.")
 		return nil
 	}
 
 	tw.SortBy([]table.SortBy{{Name: "Created", Mode: table.Dsc}})
 
 	if l.CSV {
-		fmt.Fprintln(ctx.Writer, tw.RenderCSV())
+		fmt.Fprintln(cli.Writer, tw.RenderCSV())
 	} else {
-		fmt.Fprintln(ctx.Writer, tw.Render())
+		fmt.Fprintln(cli.Writer, tw.Render())
 	}
 
 	return nil

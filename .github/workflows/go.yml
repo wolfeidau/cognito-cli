@@ -19,11 +19,6 @@ jobs:
       - name: CI Tasks
         run: make ci
 
-      - name: Convert coverage to lcov
-        uses: jandelgado/gcov2lcov-action@v1.0.0
-        with:
-            infile: coverage.txt
-            outfile: coverage.lcov
       - name: Coveralls
         uses: coverallsapp/github-action@v1.0.1
         with:
