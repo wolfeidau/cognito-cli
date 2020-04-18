@@ -1,5 +1,5 @@
 /dist
 /bin
 /coverage.*
-.envrc
+.envrc*
 /awsmocks

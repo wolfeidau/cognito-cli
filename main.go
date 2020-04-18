@@ -4,6 +4,8 @@ import (
 	"os"
 
 	"github.com/alecthomas/kong"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/wolfeidau/cognito-cli/internal/commands"
@@ -14,9 +16,25 @@ var (
 	version = "unknown"
 )
 
+type regionFlag string
+
+func (r regionFlag) AfterApply(cfg *aws.Config) error {
+	cfg.Region = aws.String(string(r))
+	return nil
+}
+
+type profileFlag string
+
+func (p profileFlag) AfterApply(cfg *aws.Config) error {
+	cfg.Credentials = credentials.NewSharedCredentials("", string(p))
+	return nil
+}
+
 var flags struct {
-	Debug            bool `help:"Enable debug mode."`
-	DisableLocalTime bool `help:"Disable localisation of times output."`
+	Debug            bool        `help:"Enable debug mode."`
+	Region           regionFlag  `help:"AWS Region." env:"AWS_REGION" default:"us-east-1" short:"r"`
+	Profile          profileFlag `help:"AWS CLI profile." env:"AWS_PROFILE" short:"p"`
+	DisableLocalTime bool        `help:"Disable localisation of times output."`
 	Version          kong.VersionFlag
 
 	Ls             commands.LsCmd             `cmd:"ls" help:"List pools."`
@@ -27,7 +45,11 @@ var flags struct {
 }
 
 func main() {
+
+	awscfg := &aws.Config{}
+
 	cli := kong.Parse(&flags,
+		kong.Bind(awscfg),
 		kong.Vars{"version": version}, // bind a var for version
 		kong.Name("cognito-cli"),
 		kong.Description("A cognito cli."),
@@ -45,7 +67,9 @@ func main() {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
-	cognitoSvc := cognito.NewService()
+	log.Debug().Str("region", string(flags.Region)).Str("profile", string(flags.Profile)).Msg("aws config")
+
+	cognitoSvc := cognito.NewService(awscfg)
 
 	err := cli.Run(&commands.CLIContext{Debug: flags.Debug, DisableLocalTime: flags.DisableLocalTime, Cognito: cognitoSvc, Writer: os.Stdout})
 	cli.FatalIfErrorf(err)
