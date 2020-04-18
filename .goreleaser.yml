@@ -2,7 +2,7 @@
 project_name: cognito-cli
 
 builds:
-- main: ./cmd/cognito-cli/main.go
+- main: ./main.go
   binary: cognito-cli
   ldflags:
     - -s -w -X main.version={{.Version}}
