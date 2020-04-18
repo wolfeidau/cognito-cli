@@ -12,7 +12,7 @@ You can download the latest release from the [release page](https://github.com/w
 If you want to build `cognito-cli` it requires a working Go installation (Go-1.14 or higher). The following command will install it to your `$GOPATH/bin`.
 
 ```bash
-GO111MODULE=off go get -u -v github.com/wolfeidau/cognito-cli
+GO111MODULE=off go get -u github.com/wolfeidau/cognito-cli
 ```
 
 # Usage
