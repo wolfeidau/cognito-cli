@@ -6,15 +6,15 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"github.com/wolfeidau/cognito-cli/internal/commands"
 	"github.com/wolfeidau/cognito-cli/pkg/cognito"
-	"github.com/wolfeidau/cognito-cli/pkg/commands"
 )
 
 var (
 	version = "unknown"
 )
 
-var cli struct {
+var flags struct {
 	Debug            bool `help:"Enable debug mode."`
 	DisableLocalTime bool `help:"Disable localisation of times output."`
 	Version          kong.VersionFlag
@@ -22,12 +22,12 @@ var cli struct {
 	Ls             commands.LsCmd             `cmd:"ls" help:"List pools."`
 	ListAttributes commands.ListAttributesCmd `cmd:"list-attributes" help:"List the schema attributes of the user pool."`
 	Find           commands.FindCmd           `cmd:"find" help:"Find users."`
-	Export         commands.ExportCmd         `cmd:"export" help:"Find users and export in CSV format."`
+	Export         commands.ExportCmd         `cmd:"export" help:"Export users, filter and write the results in CSV format."`
 	Logout         commands.LogoutCmd         `cmd:"logout" help:"Find users and trigger a logout."`
 }
 
 func main() {
-	ctx := kong.Parse(&cli,
+	cli := kong.Parse(&flags,
 		kong.Vars{"version": version}, // bind a var for version
 		kong.Name("cognito-cli"),
 		kong.Description("A cognito cli."),
@@ -41,12 +41,12 @@ func main() {
 
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 
-	if cli.Debug {
+	if flags.Debug {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	}
 
 	cognitoSvc := cognito.NewService()
 
-	err := ctx.Run(&commands.Context{Debug: cli.Debug, DisableLocalTime: cli.DisableLocalTime, Cognito: cognitoSvc, Writer: os.Stdout})
-	ctx.FatalIfErrorf(err)
+	err := cli.Run(&commands.CLIContext{Debug: flags.Debug, DisableLocalTime: flags.DisableLocalTime, Cognito: cognitoSvc, Writer: os.Stdout})
+	cli.FatalIfErrorf(err)
 }

@@ -19,7 +19,7 @@ type LogoutCmd struct {
 }
 
 // Run run the list operation
-func (f *LogoutCmd) Run(ctx *Context) error {
+func (f *LogoutCmd) Run(cli *CLIContext) error {
 	log.Debug().Msg("logout users")
 
 	log.Debug().Fields(convertMap(f.Filter)).Msg("Filter")
@@ -29,7 +29,7 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 	// use this to keep a track of how many entries we will update and logout
 	usernames := []string{}
 
-	err := ctx.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
+	err := cli.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
 		log.Debug().Int("len", len(p.Users)).Msg("page")
 
 		for _, user := range p.Users {
@@ -57,11 +57,11 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 	log.Debug().Int("len", len(usernames)).Msg("users will be logged out")
 
 	if len(usernames) == 0 {
-		fmt.Fprintln(ctx.Writer, "No users found.")
+		fmt.Fprintln(cli.Writer, "No users found.")
 		return nil
 	}
 
-	fmt.Fprintf(ctx.Writer, "Found users commencing logout for count=%d\n", len(usernames))
+	fmt.Fprintf(cli.Writer, "Found users commencing logout for count=%d\n", len(usernames))
 
 	time.Sleep(1 * time.Second)
 
@@ -77,7 +77,7 @@ func (f *LogoutCmd) Run(ctx *Context) error {
 	for _, username := range usernames {
 		log.Debug().Str("username", username).Msg("calling logout for user")
 
-		err := ctx.Cognito.Logout(f.UserPoolID, username)
+		err := cli.Cognito.Logout(f.UserPoolID, username)
 		if err != nil {
 			log.Fatal().Err(err).Msg("failed to logout user") // best to just stop here
 		}

@@ -20,7 +20,7 @@ type FindCmd struct {
 }
 
 // Run run the list operation
-func (f *FindCmd) Run(ctx *Context) error {
+func (f *FindCmd) Run(cli *CLIContext) error {
 	log.Debug().Strs("attr", f.Attributes).Msg("find users")
 
 	tw := table.NewWriter()
@@ -31,7 +31,7 @@ func (f *FindCmd) Run(ctx *Context) error {
 
 	filteringEnabled := len(f.Filter) > 0
 
-	err := ctx.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
+	err := cli.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
 		log.Debug().Int("len", len(p.Users)).Msg("page")
 
 		for _, user := range p.Users {
@@ -51,7 +51,7 @@ func (f *FindCmd) Run(ctx *Context) error {
 			}
 
 			tr = append(tr, aws.BoolValue(user.Enabled))
-			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !ctx.DisableLocalTime))
+			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !cli.DisableLocalTime))
 
 			tw.AppendRows([]table.Row{tr})
 		}
@@ -67,16 +67,16 @@ func (f *FindCmd) Run(ctx *Context) error {
 	log.Debug().Int("len", tw.Length()).Msg("render table")
 
 	if tw.Length() == 0 {
-		fmt.Fprintln(ctx.Writer, "No users found.")
+		fmt.Fprintln(cli.Writer, "No users found.")
 		return nil
 	}
 
 	tw.SortBy([]table.SortBy{{Name: "LastModified", Mode: table.Dsc}})
 
 	if f.CSV {
-		fmt.Fprintln(ctx.Writer, tw.RenderCSV())
+		fmt.Fprintln(cli.Writer, tw.RenderCSV())
 	} else {
-		fmt.Fprintln(ctx.Writer, tw.Render())
+		fmt.Fprintln(cli.Writer, tw.Render())
 	}
 
 	return nil

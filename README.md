@@ -63,12 +63,12 @@ Flags:
 
 ```
 
-To find users in a pool and export the results in CSV format.
+To export users in a pool, filter and write the results in CSV format, I use this for analysis and to verify the integrity of user details stored.
 
 ```
 Usage: cognito-cli export --user-pool-id=STRING
 
-Find users and export in CSV format.
+Export users, filter and write the results in CSV format.
 
 Flags:
   --help                    Show context-sensitive help.

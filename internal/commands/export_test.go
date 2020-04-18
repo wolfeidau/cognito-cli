@@ -12,7 +12,7 @@ import (
 	"github.com/wolfeidau/cognito-cli/pkg/cognito"
 )
 
-func TestLogout(t *testing.T) {
+func TestExport(t *testing.T) {
 	assert := require.New(t)
 
 	ctrl := gomock.NewController(t)
@@ -36,15 +36,18 @@ func TestLogout(t *testing.T) {
 	}
 
 	cognitoSvc.EXPECT().ListUsers("abc123", gomock.Any()).Do(callbackFunc).Return(nil)
-	cognitoSvc.EXPECT().Logout("abc123", "wolfeidau").Return(nil)
+	cognitoSvc.EXPECT().DescribePoolAttributes("abc123").Return([]string{"name", "given_name", "family_name"}, nil)
 
-	logoutcmd := &LogoutCmd{
+	exportCmd := &ExportCmd{
 		UserPoolID: "abc123",
 	}
 
 	buf := &bytes.Buffer{}
 
-	err := logoutcmd.Run(&Context{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+	err := exportCmd.Run(&CLIContext{Debug: true, DisableLocalTime: true, Cognito: cognitoSvc, Writer: buf})
+
+	expected := "Username,name,given_name,family_name,Enabled,LastModified\nwolfeidau,,,,false,2016-08-15 00:00:00 +0000 UTC\n"
+
 	assert.NoError(err)
-	assert.Equal("Found users commencing logout for count=1\n", buf.String())
+	assert.Equal(expected, buf.String())
 }

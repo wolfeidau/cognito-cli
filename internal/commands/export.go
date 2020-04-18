@@ -18,12 +18,12 @@ type ExportCmd struct {
 }
 
 // Run run the list operation
-func (f *ExportCmd) Run(ctx *Context) error {
+func (f *ExportCmd) Run(cli *CLIContext) error {
 	log.Debug().Msg("find and export users")
 
-	csvw := csv.NewWriter(ctx.Writer)
+	csvw := csv.NewWriter(cli.Writer)
 
-	attrs, err := ctx.Cognito.DescribePoolAttributes(f.UserPoolID)
+	attrs, err := cli.Cognito.DescribePoolAttributes(f.UserPoolID)
 	if err != nil {
 		log.Fatal().Err(err).Msg("failed to list pool attributes")
 	}
@@ -42,7 +42,7 @@ func (f *ExportCmd) Run(ctx *Context) error {
 
 	count := 0
 
-	err = ctx.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
+	err = cli.Cognito.ListUsers(f.UserPoolID, func(p *cognito.UsersPage) bool {
 		log.Debug().Int("len", len(p.Users)).Msg("page")
 
 		for _, user := range p.Users {
@@ -65,7 +65,7 @@ func (f *ExportCmd) Run(ctx *Context) error {
 			}
 
 			tr = append(tr, fmt.Sprintf("%t", aws.BoolValue(user.Enabled)))
-			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !ctx.DisableLocalTime).String())
+			tr = append(tr, awsTimeLocal(user.UserLastModifiedDate, !cli.DisableLocalTime).String())
 
 			err = csvw.Write(tr)
 			if err != nil {
@@ -85,7 +85,7 @@ func (f *ExportCmd) Run(ctx *Context) error {
 	log.Debug().Int("len", count).Msg("render table")
 
 	if count == 0 {
-		fmt.Fprintln(ctx.Writer, "No users found.")
+		fmt.Fprintln(cli.Writer, "No users found.")
 		return nil
 	}
 
