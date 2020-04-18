@@ -23,7 +23,31 @@ GO111MODULE=off go get -u github.com/wolfeidau/cognito-cli
 
 # Usage
 
-I have pulled out the CLI help for each sub command and provided them in the order which they are best explored in.
+Some example commands are as follows:
+
+```
+cognito-cli --region=ap-southeast-2 --profile=wolfeidau-dev ls
++--------------------------+--------------------------------------+--------------------------------+
+| ID                       | NAME                                 | CREATED                        |
++--------------------------+--------------------------------------+--------------------------------+
+| ap-southeast-2_abc123def | somepool_dev_master                  | 2020-03-12 11:52:24 +1100 AEDT |
+| ap-southeast-2_abc123cde | otherpool_dev_master                 | 2019-02-02 14:47:25 +1100 AEDT |
++--------------------------+--------------------------------------+--------------------------------+
+```
+
+This CLI tool supports the standard `AWS_REGION` and `AWS_PROFILE` environment variables to configure region and AWS cli profile respectively, so the following command also works.
+
+```
+AWS_PROFILE=stax-dev AWS_REGION=ap-southeast-2 cognito-cli ls
++--------------------------+--------------------------------------+--------------------------------+
+| ID                       | NAME                                 | CREATED                        |
++--------------------------+--------------------------------------+--------------------------------+
+| ap-southeast-2_abc123def | somepool_dev_master                  | 2020-03-12 11:52:24 +1100 AEDT |
+| ap-southeast-2_abc123cde | otherpool_dev_master                 | 2019-02-02 14:47:25 +1100 AEDT |
++--------------------------+--------------------------------------+--------------------------------+
+```
+
+I have also pulled out the CLI help for each sub command and provided them in the order which they are best explored in.
 
 To display a list of user pools.
 
@@ -33,13 +57,14 @@ Usage: cognito-cli ls
 List pools.
 
 Flags:
-  --help                  Show context-sensitive help.
-  --debug                 Enable debug mode.
-  --disable-local-time    Disable localisation of times output.
-  --version
+      --help                    Show context-sensitive help.
+      --debug                   Enable debug mode.
+  -r, --region="us-east-1"      AWS Region ($AWS_REGION).
+  -p, --profile=PROFILE-FLAG    AWS CLI profile ($AWS_PROFILE).
+      --disable-local-time      Disable localisation of times output.
+      --version
 
-  --csv                   Enable csv output.
-
+      --csv                     Enable csv output.
 ```
 
 To list the schema attributes of a user pool.
@@ -50,12 +75,14 @@ Usage: cognito-cli list-attributes --user-pool-id=STRING
 List the schema attributes of the user pool.
 
 Flags:
-  --help                   Show context-sensitive help.
-  --debug                  Enable debug mode.
-  --disable-local-time     Disable localisation of times output.
-  --version
+      --help                    Show context-sensitive help.
+      --debug                   Enable debug mode.
+  -r, --region="us-east-1"      AWS Region ($AWS_REGION).
+  -p, --profile=PROFILE-FLAG    AWS CLI profile ($AWS_PROFILE).
+      --disable-local-time      Disable localisation of times output.
+      --version
 
-  --user-pool-id=STRING
+      --user-pool-id=STRING
 ```
 
 To find users in a pool.
@@ -66,17 +93,18 @@ Usage: cognito-cli find --user-pool-id=STRING
 Find users.
 
 Flags:
-  --help                             Show context-sensitive help.
-  --debug                            Enable debug mode.
-  --disable-local-time               Disable localisation of times output.
-  --version
+      --help                             Show context-sensitive help.
+      --debug                            Enable debug mode.
+  -r, --region="us-east-1"               AWS Region ($AWS_REGION).
+  -p, --profile=PROFILE-FLAG             AWS CLI profile ($AWS_PROFILE).
+      --disable-local-time               Disable localisation of times output.
+      --version
 
-  --user-pool-id=STRING
-  --csv                              Enable csv output.
-  --attributes=Username,email,...    Attributes to retrieve and output.
-  --back-off=500                     Delay in ms used to backoff during paging of records
-  --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
-
+      --user-pool-id=STRING
+      --csv                              Enable csv output.
+      --attributes=Username,email,...    Attributes to retrieve and output.
+      --back-off=500                     Delay in ms used to backoff during paging of records
+      --filter=KEY=VALUE;...             Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 ```
 
 To export users in a pool, filter and write the results in CSV format, I use this for analysis and to verify the integrity of user details stored.
@@ -87,15 +115,16 @@ Usage: cognito-cli export --user-pool-id=STRING
 Export users, filter and write the results in CSV format.
 
 Flags:
-  --help                    Show context-sensitive help.
-  --debug                   Enable debug mode.
-  --disable-local-time      Disable localisation of times output.
-  --version
+      --help                    Show context-sensitive help.
+      --debug                   Enable debug mode.
+  -r, --region="us-east-1"      AWS Region ($AWS_REGION).
+  -p, --profile=PROFILE-FLAG    AWS CLI profile ($AWS_PROFILE).
+      --disable-local-time      Disable localisation of times output.
+      --version
 
-  --user-pool-id=STRING
-  --back-off=500            Delay in ms used to backoff during paging of records
-  --filter=KEY=VALUE;...    Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
-
+      --user-pool-id=STRING
+      --back-off=500            Delay in ms used to backoff during paging of records
+      --filter=KEY=VALUE;...    Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 ```
 
 **NOTE:** This is not designed to directly feed into the [StartUserImportJob](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_StartUserImportJob.html) operation, some transformations may be required.
@@ -108,19 +137,20 @@ Usage: cognito-cli logout --user-pool-id=STRING
 Find users and trigger a logout.
 
 Flags:
-  --help                    Show context-sensitive help.
-  --debug                   Enable debug mode.
-  --disable-local-time      Disable localisation of times output.
-  --version
+      --help                    Show context-sensitive help.
+      --debug                   Enable debug mode.
+  -r, --region="us-east-1"      AWS Region ($AWS_REGION).
+  -p, --profile=PROFILE-FLAG    AWS CLI profile ($AWS_PROFILE).
+      --disable-local-time      Disable localisation of times output.
+      --version
 
-  --user-pool-id=STRING
-  --back-off=500            Delay in ms used to backoff during paging of records
-  --filter=KEY=VALUE;...    Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
-
+      --user-pool-id=STRING
+      --back-off=500            Delay in ms used to backoff during paging of records
+      --filter=KEY=VALUE;...    Filter users based on a set of patterns, supports '*' and '?' wildcards in either string.
 ```
 
 **NOTE:** This calls [AdminUserGlobalSignOut](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_AdminUserGlobalSignOut.html) for each user which revokes their refresh token, it won't actually log them out straight away, they will however have to log in the next time they attempt to refresh their access token. This can take up to 1 hour for users who have recently refreshed their token.
 
 # License
 
-This application is released under Apache 2.0 license and is copyright Mark Wolfe.
+This application is released under Apache 2.0 license and is copyright [Mark Wolfe](https://www.wolfe.id.au).
