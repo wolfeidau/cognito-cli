@@ -14,9 +14,6 @@ bin/golangci-lint-${GOLANGCI_VERSION}:
 bin/mockgen:
 	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/golang/mock/mockgen
 
-bin/go-acc:
-	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/ory/go-acc
-
 bin/gcov2lcov:
 	@env GOBIN=$$PWD/bin GO111MODULE=on go install github.com/jandelgado/gcov2lcov
 
@@ -40,8 +37,8 @@ lint: bin/golangci-lint
 	@bin/golangci-lint run
 .PHONY: lint
 
-test: bin/go-acc bin/gcov2lcov
+test: bin/gcov2lcov
 	@echo "--- test all the things"
-	@bin/go-acc --ignore mocks ./... -- -short -v -failfast
+	@go test -v -covermode=count -coverprofile=coverage.txt ./ ./pkg/... ./internal/...
 	@bin/gcov2lcov -infile=coverage.txt -outfile=coverage.lcov
 .PHONY: test
