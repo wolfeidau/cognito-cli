@@ -38,7 +38,7 @@ cognito-cli --region=ap-southeast-2 --profile=wolfeidau-dev ls
 This CLI tool supports the standard `AWS_REGION` and `AWS_PROFILE` environment variables to configure region and AWS cli profile respectively, so the following command also works.
 
 ```
-AWS_PROFILE=stax-dev AWS_REGION=ap-southeast-2 cognito-cli ls
+AWS_PROFILE=wolfeidau-dev AWS_REGION=ap-southeast-2 cognito-cli ls
 +--------------------------+--------------------------------------+--------------------------------+
 | ID                       | NAME                                 | CREATED                        |
 +--------------------------+--------------------------------------+--------------------------------+
