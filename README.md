@@ -7,9 +7,15 @@ This is the missing CLI tool for working with [AWS Cognito](https://aws.amazon.c
 
 # Installation
 
-You can download the latest release from the [release page](https://github.com/wolfeidau/cognito-cli/releases).
+Install it using [gobinaries](https://gobinaries.com/).
 
-If you want to build `cognito-cli` it requires a working Go installation (Go-1.14 or higher). The following command will install it to your `$GOPATH/bin`.
+```
+curl -sf https://gobinaries.com/wolfeidau/cognito-cli | sh
+```
+
+Download the latest release from the [release page](https://github.com/wolfeidau/cognito-cli/releases).
+
+Or if you have a working Go installation (Go-1.14 or higher) and want to build `cognito-cli` it fun the following command to install in your `$GOPATH/bin` folder.
 
 ```bash
 GO111MODULE=off go get -u github.com/wolfeidau/cognito-cli
